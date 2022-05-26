@@ -1,0 +1,33 @@
+.outerGrid{
+  height: 600px;
+  width: 500px;
+  margin: auto;
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.outerGrid > *{
+  height: 100px;
+  width: 500px;
+  background-color: blue;
+  display: flex;
+  flex-direction: row;
+}
+
+.outerGrid > * > *{
+  width: 100px;
+  height: 100px;
+  background-color: beige;
+  border-style: solid;
+  border-color: black ;
+
+}
+
+.cell{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}

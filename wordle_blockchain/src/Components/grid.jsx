@@ -1,22 +1,28 @@
 import React, { Component, useState } from 'react';
+import wordslist from '../utils/wordsExtraction.mjs';
 
 class Grid extends Component {
 
     correctWord = "ASDFG";
-    wordCollection = [
-        "ASDFG",
-        "GHJKL",
-        "QWERTY",
-        "ZXCVB",
-        "POIUY",
-        "ASIFS"
-    ]
+    wordCollection = wordslist
+    // wordCollection = ["aahed"]
+
+    componentDidMount(){
+        // console.log(this.wordCollection)
+    }
 
     
     state = {cellarray: new Array(30).fill("")};
     cellCounter = 0;
     base = 0;
-    consecutveSubmission = false;
+    consecutiveSubmission = false;
+
+    checkIfWordInWordsCollection(theword){
+        for (let index = 0; index < this.wordCollection.length; index++) {
+            if(theword.toLowerCase() === this.wordCollection[index]) return true;
+        }
+        return false;
+    }
 
     checkValidity() {
         // form a word from array elements
@@ -26,16 +32,16 @@ class Grid extends Component {
                 word += this.state.cellarray[this.cellCounter - 5 + i];
             }
         }
-        if (word === this.correctWord && !this.consecutveSubmission) {
+        if (word === this.correctWord && !this.consecutiveSubmission) {
             alert("You found the word!");
             this.base++;
-            this.consecutveSubmission = true;
+            this.consecutiveSubmission = true;
         }
         // check if the word exist in wordcollection
-        else if (this.wordCollection.includes(word) && !this.consecutveSubmission) {
+        else if (this.checkIfWordInWordsCollection(word) && !this.consecutiveSubmission) {
             alert("You found a word but not correct!");
             this.base++;
-            this.consecutveSubmission = true;
+            this.consecutiveSubmission = true;
         }
 
         else {
@@ -56,7 +62,7 @@ class Grid extends Component {
             }
         }
         else if (String.fromCharCode(e.keyCode).match(/(\w|\s)/g)) {
-            this.consecutveSubmission = false;
+            this.consecutiveSubmission = false;
             if(this.cellCounter < (this.base + 1)*5){
                 this.state.cellarray[this.cellCounter] = String.fromCharCode(e.keyCode);
                 this.cellCounter++;

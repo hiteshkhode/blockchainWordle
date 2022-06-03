@@ -1,13 +1,31 @@
+body{
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(2,2,50,1) 50%, rgba(0,212,255,1) 100%);
+  justify-content: center;
+  align-items: center;
+}
+
 Header {
   display: flex;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 2rem;
   justify-content: center;
 }
 
+#heading{
+  background: #FF96AF;
+  background: linear-gradient(to right, #ff7f43 25%, #1ac37d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+}
+
 .outerGrid{
-  height: 600px;
-  width: 500px;
+  outline: none;
+  height: fit-content;
+  width: fit-content;
   margin: auto;
-  background-color: red;
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -15,24 +33,22 @@ Header {
 
 .outerGrid > *{
   height: 100px;
-  width: 500px;
-  background-color: blue;
+  width: fit;
   display: flex;
   flex-direction: row;
-}
-
-.outerGrid > * > *{
-  width: 100px;
-  height: 100px;
-  background-color: beige;
-  border-style: solid;
-  border-color: black ;
-
+  padding: 5px;
 }
 
 .cell{
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 100px;
+  height: 100px;
+  background-color: beige;
+  /* margin:; */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 3rem;
+  border-radius: 5px;
 }

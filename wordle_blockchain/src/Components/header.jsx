@@ -6,7 +6,8 @@ class Header extends Component {
 
         <div id='headerid'>
             <header>
-            <h1>Blockchain wordle</h1>
+            <h1 id='heading'>Blockchain wordle <span style={{color: "black"}}>!</span>
+            </h1>
             </header>
         </div>
     );

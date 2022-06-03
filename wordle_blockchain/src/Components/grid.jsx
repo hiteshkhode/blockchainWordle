@@ -9,7 +9,7 @@ import { contractAddress } from '../utils/contract_info.json';
 
 class Grid extends Component {
 
-    state = {cellarray: new Array(30).fill(""), accountAddress: ""};
+    state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
     cellCounter = 0;
     base = 0;
     consecutiveSubmission = false;
@@ -48,15 +48,38 @@ class Grid extends Component {
         }
         if (word === this.correctWord && !this.consecutiveSubmission) {
             alert("You found the word!");
-            this.base++;
             this.consecutiveSubmission = true;
+            for (let index = 0; index < 5; index++) {
+                this.state.colorofdiv[(this.base)*5 + index] = "green";
+            }
+            this.base++;
         }
-        
+
         // check if the word exist in wordcollection
         else if (this.checkIfWordInWordsCollection(word) && !this.consecutiveSubmission) {
-            alert("You found a word but not correct!");
+            console.log("elseif executed")
+            let setofcorrectword = new Set();
+            for (let i = 0; i < this.correctWord.length; i++) {
+                setofcorrectword.add(this.correctWord[i]);
+            }
+
+            for (let index = 0; index < 5; index++) {
+                
+                if (word[index] === this.correctWord[index]) {
+                    this.state.colorofdiv[this.base*5 + index] = "rgb(106 170 100)";
+                }
+                else if(setofcorrectword.has(word[index])) {
+                    this.state.colorofdiv[this.base*5 + index] = "rgb(201 180 88)";
+                }
+                else{
+                    this.state.colorofdiv[this.base*5 + index] = "rgb(120 124 126)";
+                }
+
+            }
+            // this.state.colorofdiv[2] = "green";
             this.base++;
             this.consecutiveSubmission = true;
+            this.setState({colorofdiv: this.state.colorofdiv});
         }
 
         else {
@@ -114,50 +137,47 @@ class Grid extends Component {
         return (
             <div className='outerGrid' tabIndex="0" onKeyDown={(e) => this.handleKeyDown(e)}>
 
-                <button onClick={() => makechange(false)}>Set False</button>
-                <button onClick={() => makechange(true)}>Set True</button>
-
                 <div className='row0'>
-                    <div className="00 cell">{this.state.cellarray[0]}</div>
-                    <div className="01 cell">{this.state.cellarray[1]}</div>
-                    <div className="02 cell">{this.state.cellarray[2]}</div>
-                    <div className="03 cell">{this.state.cellarray[3]}</div>
-                    <div className="04 cell">{this.state.cellarray[4]}</div>
+                    <div className="00 cell" style={{backgroundColor: `${this.state.colorofdiv[0]}`}}>{this.state.cellarray[0]}</div>
+                    <div className="01 cell" style={{backgroundColor: `${this.state.colorofdiv[1]}`}}>{this.state.cellarray[1]}</div>
+                    <div className="02 cell" style={{backgroundColor: `${this.state.colorofdiv[2]}`}}>{this.state.cellarray[2]}</div>
+                    <div className="03 cell" style={{backgroundColor: `${this.state.colorofdiv[3]}`}}>{this.state.cellarray[3]}</div>
+                    <div className="04 cell" style={{backgroundColor: `${this.state.colorofdiv[4]}`}}>{this.state.cellarray[4]}</div>
                 </div>
                 <div className='row1'>
-                    <div className="10 cell">{this.state.cellarray[5]}</div>
-                    <div className="11 cell">{this.state.cellarray[6]}</div>
-                    <div className="12 cell">{this.state.cellarray[7]}</div>
-                    <div className="13 cell">{this.state.cellarray[8]}</div>
-                    <div className="14 cell">{this.state.cellarray[9]}</div>
+                    <div className="10 cell" style={{backgroundColor: `${this.state.colorofdiv[5]}`}}>{this.state.cellarray[5]}</div>
+                    <div className="11 cell" style={{backgroundColor: `${this.state.colorofdiv[6]}`}}>{this.state.cellarray[6]}</div>
+                    <div className="12 cell" style={{backgroundColor: `${this.state.colorofdiv[7]}`}}>{this.state.cellarray[7]}</div>
+                    <div className="13 cell" style={{backgroundColor: `${this.state.colorofdiv[8]}`}}>{this.state.cellarray[8]}</div>
+                    <div className="14 cell" style={{backgroundColor: `${this.state.colorofdiv[9]}`}}>{this.state.cellarray[9]}</div>
                 </div>
                 <div className='row2'>
-                    <div className="20 cell">{this.state.cellarray[10]}</div>
-                    <div className="21 cell">{this.state.cellarray[11]}</div>
-                    <div className="22 cell">{this.state.cellarray[12]}</div>
-                    <div className="23 cell">{this.state.cellarray[13]}</div>
-                    <div className="24 cell">{this.state.cellarray[14]}</div>
+                    <div className="20 cell" style={{backgroundColor: `${this.state.colorofdiv[10]}`}}>{this.state.cellarray[10]}</div>
+                    <div className="21 cell" style={{backgroundColor: `${this.state.colorofdiv[11]}`}}>{this.state.cellarray[11]}</div>
+                    <div className="22 cell" style={{backgroundColor: `${this.state.colorofdiv[12]}`}}>{this.state.cellarray[12]}</div>
+                    <div className="23 cell" style={{backgroundColor: `${this.state.colorofdiv[13]}`}}>{this.state.cellarray[13]}</div>
+                    <div className="24 cell" style={{backgroundColor: `${this.state.colorofdiv[14]}`}}>{this.state.cellarray[14]}</div>
                 </div>
                 <div className='row3'>
-                    <div className="30 cell">{this.state.cellarray[15]}</div>
-                    <div className="31 cell">{this.state.cellarray[16]}</div>
-                    <div className="32 cell">{this.state.cellarray[17]}</div>
-                    <div className="33 cell">{this.state.cellarray[18]}</div>
-                    <div className="34 cell">{this.state.cellarray[19]}</div>
+                    <div className="30 cell" style={{backgroundColor: `${this.state.colorofdiv[15]}`}}>{this.state.cellarray[15]}</div>
+                    <div className="31 cell" style={{backgroundColor: `${this.state.colorofdiv[16]}`}}>{this.state.cellarray[16]}</div>
+                    <div className="32 cell" style={{backgroundColor: `${this.state.colorofdiv[17]}`}}>{this.state.cellarray[17]}</div>
+                    <div className="33 cell" style={{backgroundColor: `${this.state.colorofdiv[18]}`}}>{this.state.cellarray[18]}</div>
+                    <div className="34 cell" style={{backgroundColor: `${this.state.colorofdiv[19]}`}}>{this.state.cellarray[19]}</div>
                 </div>
                 <div className='row4'>
-                    <div className="40 cell">{this.state.cellarray[20]}</div>
-                    <div className="41 cell">{this.state.cellarray[21]}</div>
-                    <div className="42 cell">{this.state.cellarray[22]}</div>
-                    <div className="43 cell">{this.state.cellarray[23]}</div>
-                    <div className="44 cell">{this.state.cellarray[24]}</div>
+                    <div className="40 cell" style={{backgroundColor: `${this.state.colorofdiv[20]}`}}>{this.state.cellarray[20]}</div>
+                    <div className="41 cell" style={{backgroundColor: `${this.state.colorofdiv[21]}`}}>{this.state.cellarray[21]}</div>
+                    <div className="42 cell" style={{backgroundColor: `${this.state.colorofdiv[22]}`}}>{this.state.cellarray[22]}</div>
+                    <div className="43 cell" style={{backgroundColor: `${this.state.colorofdiv[23]}`}}>{this.state.cellarray[23]}</div>
+                    <div className="44 cell" style={{backgroundColor: `${this.state.colorofdiv[24]}`}}>{this.state.cellarray[24]}</div>
                 </div>
                 <div className='row5'>
-                    <div className="50 cell">{this.state.cellarray[25]}</div>
-                    <div className="51 cell">{this.state.cellarray[26]}</div>
-                    <div className="52 cell">{this.state.cellarray[27]}</div>
-                    <div className="53 cell">{this.state.cellarray[28]}</div>
-                    <div className="54 cell">{this.state.cellarray[29]}</div>
+                    <div className="50 cell" style={{backgroundColor: `${this.state.colorofdiv[25]}`}}>{this.state.cellarray[25]}</div>
+                    <div className="51 cell" style={{backgroundColor: `${this.state.colorofdiv[26]}`}}>{this.state.cellarray[26]}</div>
+                    <div className="52 cell" style={{backgroundColor: `${this.state.colorofdiv[27]}`}}>{this.state.cellarray[27]}</div>
+                    <div className="53 cell" style={{backgroundColor: `${this.state.colorofdiv[28]}`}}>{this.state.cellarray[28]}</div>
+                    <div className="54 cell" style={{backgroundColor: `${this.state.colorofdiv[29]}`}}>{this.state.cellarray[29]}</div>
                 </div>
             </div>
         );

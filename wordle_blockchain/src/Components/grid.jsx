@@ -2,12 +2,13 @@ import React, { Component, useState } from 'react';
 import wordslist from '../utils/wordsExtraction.mjs';
 import erc20abi from '../contract.abi.json'
 import { ethers } from 'ethers';
+import { getAccountAddress } from '../utils/get_account_address.mjs';
+import { makechange } from '../utils/set_value.mjs';
+import { contractAddress } from '../utils/contract_info.json';
+
 
 class Grid extends Component {
 
-    contract_info = {
-        contract_address: ""
-    }
     state = {cellarray: new Array(30).fill(""), accountAddress: ""};
     cellCounter = 0;
     base = 0;
@@ -15,31 +16,17 @@ class Grid extends Component {
 
     correctWord = "ASDFG";
     wordCollection = wordslist
-    // wordCollection = ["aahed"]
 
-    accountChangeHandler (accountAddress) {
-        this.state.accountAddress = accountAddress;
-        this.setState({accountAddress: this.state.accountAddress})
-    }
-
-    componentDidMount(){
-        this.contract_info.contract_address = "0x0b9bf7DdAd0C06B0e851Ab7b8f90CfD4df59317e"
-        this.setState({contract_address: this.contract_info.contract_address})
+    async componentDidMount(){
 
         if(window.ethereum){
-            // console.log("metamask present")
-            window.ethereum
-                .request({ method: "eth_requestAccounts" })
-                    .then((res) => this.accountChangeHandler(res[0]));
-                
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const contract_interactivity = new ethers.Contract( this.contract_info.contract_address, erc20abi, provider);
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const contract_interactivity = new ethers.Contract( contractAddress, erc20abi, provider);
+            contract_interactivity.returnAddressResult(await getAccountAddress()).then((data) => console.log(data))  
+        }
 
-        contract_interactivity.returnAddressResult("0xEF645838bA7567E5853eDA86796Fe7cfd9Ba11D5").then((data) => console.log(data))  
-
-
-        }else{
-        alert("install metamask extension!!")
+        else{
+            alert("install metamask extension!!")
         }
     }
     
@@ -63,15 +50,8 @@ class Grid extends Component {
             alert("You found the word!");
             this.base++;
             this.consecutiveSubmission = true;
-
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            const contract_interactivity = new ethers.Contract( this.contract_info.contract_address, erc20abi, signer);
-            // const signerAddress = await signer.getAddress();
-            const returnfromcontract = await contract_interactivity.toUpdateStatsOfResult(this.state.accountAddress);
-            console.log(returnfromcontract)
-
         }
+        
         // check if the word exist in wordcollection
         else if (this.checkIfWordInWordsCollection(word) && !this.consecutiveSubmission) {
             alert("You found a word but not correct!");
@@ -130,27 +110,12 @@ class Grid extends Component {
         return gridelements;
     }
 
-    async setFalse() {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const contract_interactivity = new ethers.Contract( this.contract_info.contract_address, erc20abi, signer);
-        await contract_interactivity.setFalse(this.state.accountAddress)
-    }
-
-    async setTrue() {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const contract_interactivity = new ethers.Contract( this.contract_info.contract_address, erc20abi, signer);
-        await contract_interactivity.setTrue(this.state.accountAddress)
-    }
-
-
     render() {
         return (
             <div className='outerGrid' tabIndex="0" onKeyDown={(e) => this.handleKeyDown(e)}>
 
-                <button onClick={() => this.setFalse()}>Set False</button>
-                <button onClick={() => this.setTrue()}>Set True</button>
+                <button onClick={() => makechange(false)}>Set False</button>
+                <button onClick={() => makechange(true)}>Set True</button>
 
                 <div className='row0'>
                     <div className="00 cell">{this.state.cellarray[0]}</div>

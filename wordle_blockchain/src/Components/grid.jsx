@@ -9,6 +9,7 @@ import { gettimestamp } from '../utils/get_time_stamp.mjs';
 import { gameFinished } from '../utils/game_finished.mjs';
 import { previouslyPlayed } from '../utils/previously_played.mjs';
 import { pushZero } from '../utils/add_zero.mjs';
+import { formatEther } from 'ethers/lib/utils';
 
 
 class Grid extends Component {
@@ -24,6 +25,11 @@ class Grid extends Component {
     wordCollection = wordslist
 
     async componentDidMount(){
+        
+        // console.log(typeof( ))
+        let response = await fetch("https://quiet-dawn-01664.herokuapp.com/");
+        let jsonresponse = await response.json();
+        this.correctWord = jsonresponse.word.toUpperCase();
 
         this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
         
@@ -67,8 +73,9 @@ class Grid extends Component {
             this.base++;
             gameFinished();
             this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
+            this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
+            this.base = 0;
             return ;
-            // gettimestamp();
         }
 
         // check if the word exist in wordcollection
@@ -101,6 +108,7 @@ class Grid extends Component {
                 console.log(this.correctWord)
                 this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
                 this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
+                this.base = 0;
             };
         }
 

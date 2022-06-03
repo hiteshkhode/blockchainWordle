@@ -51,4 +51,18 @@ Header {
   justify-content: center;
   font-size: 3rem;
   border-radius: 5px;
+  caret-color: rgba(0, 0, 0, 0);
+}
+
+#wrapperDiv{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#pushZeroButton{
+  margin-top: 40px;
+  border-radius: 30px;
+  background-color: #FF96AF;
 }

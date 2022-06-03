@@ -64862,9 +64862,16 @@ var words = [
   ]
 
 var wordslist = []
-
+var validlist = []
 for (let i = 0; i < words.length; i++) {
-    wordslist.push(words[i].word)
-}
+    wordslist.push(words[i].word)   
+    words[i]["occurrenceInDigits"] = words[i].occurrence * 100
 
-export default wordslist;
+    if(words[i].occurrence > 0.000001) {
+      validlist.push(words[i].word)
+    }
+  }
+
+
+
+export { validlist, wordslist };

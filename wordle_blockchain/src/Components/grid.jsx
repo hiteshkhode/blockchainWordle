@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useContext, useState } from 'react';
 import { wordslist } from '../utils/wordsExtraction.mjs';
 import erc20abi from '../ABI.json'
 import { ethers } from 'ethers';
@@ -6,11 +6,17 @@ import { contractAddress } from '../utils/contract_info.json';
 import { gameFinished } from '../utils/game_finished.mjs';
 import { previouslyPlayed } from '../utils/previously_played.mjs';
 import { pushZero } from '../utils/add_zero.mjs';
+import PromptContext from '../Context/prompt_context.jsx';
+import PromptState from '../Context/prompt_state.jsx';
 
+// const changeMsg = (msg) => {
+//     const msgContext = useContext(PromptContext);
+//     PromptContext.setWinMsg(msg);
+// }
 
-class Grid extends Component {
+class GridClass extends Component {
 
-    state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
+    state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), msgToPrmpt: ""};
     cellCounter = 0;
     base = 0;
     consecutiveSubmission = false;
@@ -20,21 +26,19 @@ class Grid extends Component {
     wordCollection = wordslist
 
     async componentDidMount(){
-        
-        // console.log(typeof( ))
+
         let response = await fetch("https://quiet-dawn-01664.herokuapp.com/");
         let jsonresponse = await response.json();
         this.correctWord = jsonresponse.word.toUpperCase();
 
-        this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
+        this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige")});
         
-        if (await previouslyPlayed()) alert("You have already played this game!");
-        else alert("you can start the game now!");
+        if (await previouslyPlayed()) this.context.setWinMsg("You have already played this game!");
 
 
         if(window.ethereum){
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const contract_interactivity = new ethers.Contract( contractAddress, erc20abi, provider);
+            // const provider = new ethers.providers.Web3Provider(window.ethereum);
+            // const contract_interactivity = new ethers.Contract( contractAddress, erc20abi, provider);
             // contract_interactivity.returnAddressResult(await getAccountAddress()).then((data) => console.log(data))  
         }
 
@@ -60,15 +64,15 @@ class Grid extends Component {
             }
         }
         if (word === this.correctWord && !this.consecutiveSubmission) {
-            alert("You found the word!");
-            // toggleMsg(true);
+            this.context.setWinMsg("You found the word!");
+
             this.consecutiveSubmission = true;
             for (let index = 0; index < 5; index++) {
                 this.state.colorofdiv[(this.base)*5 + index] = "green";
             }
             this.base++;
             gameFinished();
-            this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
+            this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige")};
             this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
             this.cellCounter = 0;
             this.base = 0;
@@ -101,10 +105,10 @@ class Grid extends Component {
             this.consecutiveSubmission = true;
             this.setState({colorofdiv: this.state.colorofdiv});
             if(this.base === 6) {
-                alert("You have lost the game!")
+                this.context.setWinMsg("You have lost the game!");
                 gameFinished();
                 console.log(this.correctWord)
-                this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
+                this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), msgToPrmpt: "You lost!"};
                 this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
                 this.cellCounter = 0;
                 this.base = 0;
@@ -113,7 +117,7 @@ class Grid extends Component {
         }
 
         else {
-            alert("word does not exist");
+            this.context.setWinMsg("The word is not in the dictionary!");
         }
 
 
@@ -214,9 +218,9 @@ class Grid extends Component {
                 </div>
 
                 <div id='pushZerodiv'>
-                    <button onClick={pushZero} id='pushZeroButton' >
+                    <button onClick={pushZero} id='pushZeroButton' className='playAgain' >
                         <h1 id='buttonText'>Play again!</h1>
-                        <span id='sameDay'>(same day)</span>
+                        {/* <span id='sameDay'>(same day)</span> */}
                     </button>
                 </div>
             </div>
@@ -226,4 +230,20 @@ class Grid extends Component {
 
 }
 
-export default Grid;
+GridClass.contextType = PromptContext;
+
+
+
+
+// const grid = () => {
+//     const msgContext = useContext(PromptContext);   
+
+//     return(
+//         <GridClass />
+//     )
+// }
+
+
+
+
+export default GridClass;

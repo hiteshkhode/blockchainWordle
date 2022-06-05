@@ -13,7 +13,7 @@ function App() {
     <PromptState>
       <div className="App">
         <Header />
-        <Grid text='this is what should appear in place of grid'/>
+        <Grid />
         <Prompt />
         {/* <TestContext /> */}
       </div>

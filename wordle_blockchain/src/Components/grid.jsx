@@ -1,15 +1,11 @@
 import React, { Component, useState } from 'react';
-import { validlist, wordslist } from '../utils/wordsExtraction.mjs';
+import { wordslist } from '../utils/wordsExtraction.mjs';
 import erc20abi from '../ABI.json'
 import { ethers } from 'ethers';
-import { getAccountAddress } from '../utils/get_account_address.mjs';
-import { makechange } from '../utils/set_value.mjs';
 import { contractAddress } from '../utils/contract_info.json';
-import { gettimestamp } from '../utils/get_time_stamp.mjs';
 import { gameFinished } from '../utils/game_finished.mjs';
 import { previouslyPlayed } from '../utils/previously_played.mjs';
 import { pushZero } from '../utils/add_zero.mjs';
-import { formatEther } from 'ethers/lib/utils';
 
 
 class Grid extends Component {
@@ -20,7 +16,6 @@ class Grid extends Component {
     consecutiveSubmission = false;
 
     // correctWord = validlist[Math.floor(Math.random() * validlist.length)].toUpperCase();
-    correctWord = "ASDFG"
 
     wordCollection = wordslist
 
@@ -66,6 +61,7 @@ class Grid extends Component {
         }
         if (word === this.correctWord && !this.consecutiveSubmission) {
             alert("You found the word!");
+            // toggleMsg(true);
             this.consecutiveSubmission = true;
             for (let index = 0; index < 5; index++) {
                 this.state.colorofdiv[(this.base)*5 + index] = "green";
@@ -74,7 +70,9 @@ class Grid extends Component {
             gameFinished();
             this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
             this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
+            this.cellCounter = 0;
             this.base = 0;
+            this.consecutiveSubmission = false;
             return ;
         }
 
@@ -108,7 +106,9 @@ class Grid extends Component {
                 console.log(this.correctWord)
                 this.state = {cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige"), accountAddress: ""};
                 this.setState({cellarray: new Array(30).fill(""), colorofdiv: new Array(30).fill("beige") }, );
+                this.cellCounter = 0;
                 this.base = 0;
+                this.consecutiveSubmission = false;
             };
         }
 

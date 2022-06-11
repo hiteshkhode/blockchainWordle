@@ -8,7 +8,7 @@ app.use(cors())
 
 var wordslist = []
 var validlist = []
-var usedWords = []
+const usedWords = new Set()
 for (let i = 0; i < words.length; i++) {
     wordslist.push(words[i].word)   
     words[i]["occurrenceInDigits"] = words[i].occurrence * 100
@@ -33,15 +33,15 @@ getRandomWord = () => {
     if(lastdate != currentdate){ 
         
         lastdate = currentdate
-        randomvar = Math.floor(Math.random())
-        word = validlist[randomvar * validlist.length];
-        usedWords.push(word)
-        // function to check if word is present in usedWords
-        
-        
+        word = validlist[Math.floor(Math.random() * validlist.length)]
+        if (usedWords.has(word)) getRandomWord();
+        else usedWords.add(word)      
         return(JSON.stringify({word}))
     }
-    else return(JSON.stringify({word}));
+    else {
+      // console.log(usedWords)
+      return(JSON.stringify({word}))
+    }
 
 }
 

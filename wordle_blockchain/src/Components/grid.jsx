@@ -27,7 +27,7 @@ class GridClass extends Component {
 
     async componentDidMount(){
 
-        let response = await fetch("https://quiet-dawn-01664.herokuapp.com/");
+        let response = await fetch("https://boiling-plateau-76509.herokuapp.com/");
         let jsonresponse = await response.json();
         this.correctWord = jsonresponse.word.toUpperCase();
 

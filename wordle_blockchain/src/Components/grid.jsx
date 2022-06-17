@@ -27,7 +27,7 @@ class GridClass extends Component {
 
     async componentDidMount(){
 
-        let response = await fetch("https://boiling-plateau-76509.herokuapp.com/", {
+        let response = await fetch("https://calm-meadow-44532.herokuapp.com/", {
             mode: 'cors',
             headers: {
               'Access-Control-Allow-Origin':'*'
